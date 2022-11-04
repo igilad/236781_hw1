@@ -11,24 +11,35 @@ class FirstLastSampler(Sampler):
     A sampler that returns elements in a first-last order.
     """
 
-    def __init__(self, data_source: Sized):
+    def _init_(self, data_source: Sized):
         """
         :param data_source: Source of data, can be anything that has a len(),
         since we only care about its number of elements.
         """
-        super().__init__(data_source)
+        super()._init_(data_source)
         self.data_source = data_source
 
-    def __iter__(self) -> Iterator[int]:
+    def _iter_(self) -> Iterator[int]:
         # TODO:
         # Implement the logic required for this sampler.
         # If the length of the data source is N, you should return indices in a
         # first-last ordering, i.e. [0, N-1, 1, N-2, ...].
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        n = 0
+        count = 0
+        while True:
+            yield n
+            count+=1
+            if count >= len(self.data_source):
+                break
+            yield len(self.data_source)-n-1
+            count += 1
+            if count >= len(self.data_source):
+                break
+            n += 1
         # ========================
 
-    def __len__(self):
+    def _len_(self):
         return len(self.data_source)
 
 
@@ -58,7 +69,21 @@ def create_train_validation_loaders(
     #  Hint: you can specify a Sampler class for the `DataLoader` instance
     #  you create.
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
+
+    # Creating data indices for training and validation splits:
+    dataset_size = len(dataset)
+    indices = torch.randperm(dataset_size)
+    split = int(np.floor(validation_ratio * dataset_size))
+    train_indices, val_indices = indices[split:], indices[:split]
+
+    # Creating PT data samplers and loaders:
+    train_sampler = torch.utils.data.sampler.SubsetRandomSampler(train_indices)
+    valid_sampler = torch.utils.data.sampler.SubsetRandomSampler(val_indices)
+
+    dl_train = torch.utils.data.DataLoader(dataset, batch_size=batch_size,
+                                               sampler=train_sampler)
+    dl_valid = torch.utils.data.DataLoader(dataset, batch_size=batch_size,
+                                                    sampler=valid_sampler)
     # ========================
 
     return dl_train, dl_valid

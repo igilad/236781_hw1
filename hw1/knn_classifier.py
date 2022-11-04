@@ -91,10 +91,17 @@ def l2_dist(x1: Tensor, x2: Tensor):
 
     dists = None
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
+    x1_sqrd = torch.sum(x1**2, dim = 1)
+    x2_sqrd = torch.sum(x2**2, dim = 1)
+
+    ab = x1@torch.transpose(x2 , 0 , 1)
+
+    dists = torch.transpose((-2*ab) , 0 , 1) + x1_sqrd
+    dists = torch.transpose(dists , 0 , 1)+x2_sqrd
+
     # ========================
 
-    return dists
+    return dists**.5
 
 
 def accuracy(y: Tensor, y_pred: Tensor):
