@@ -31,7 +31,18 @@ class KNNClassifier(object):
         #     y_train.
         #  2. Save the number of classes as n_classes.
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        first = True
+        x_train = []
+        y_train = 0
+        for x, y in dl_train:
+            if first:
+                x_train = x
+                y_train = y
+                first = False
+            else:
+                x_train = torch.cat((x_train, x), 0)
+                y_train = torch.cat((y_train, y), 0)
+        n_classes = len(torch.unique(y_train))
         # ========================
 
         self.x_train = x_train
@@ -63,7 +74,9 @@ class KNNClassifier(object):
             #  - Set y_pred[i] to the most common class among them
             #  - Don't use an explicit loop.
             # ====== YOUR CODE: ======
-            raise NotImplementedError()
+            indices = torch.argsort(dist_matrix[:, i])[:self.k]
+            classes = torch.index_select(self.y_train , 0 , indices)
+            y_pred[i] = classes.mode()[0].item()
             # ========================
 
         return y_pred
@@ -118,7 +131,8 @@ def accuracy(y: Tensor, y_pred: Tensor):
     # TODO: Calculate prediction accuracy. Don't use an explicit loop.
     accuracy = None
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
+    accuracy = y == y_pred
+    accuracy = accuracy.sum().item() / len(y)
     # ========================
 
     return accuracy
