@@ -31,17 +31,7 @@ class KNNClassifier(object):
         #     y_train.
         #  2. Save the number of classes as n_classes.
         # ====== YOUR CODE: ======
-        first = True
-        x_train = []
-        y_train = 0
-        for x, y in dl_train:
-            if first:
-                x_train = x
-                y_train = y
-                first = False
-            else:
-                x_train = torch.cat((x_train, x), 0)
-                y_train = torch.cat((y_train, y), 0)
+        x_train , y_train = dataloader_utils.flatten(dl_train)
         n_classes = len(torch.unique(y_train))
         # ========================
 
@@ -163,7 +153,26 @@ def find_best_k(ds_train: Dataset, k_choices, num_folds):
         #  random split each iteration), or implement something else.
 
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        k_accuracies = []
+        for fold in range(num_folds):
+            n = len(ds_train)
+            indices = list(range(n))
+            val_indices = indices[int(np.floor(fold * n / num_folds)):int(np.floor((fold + 1) * n / num_folds))]
+            train_indices = [j for j in indices if j not in val_indices]
+            cv_val_ds = torch.utils.data.Subset(ds_train, val_indices)
+            cv_train_ds = torch.utils.data.Subset(ds_train, train_indices)
+
+            dl_cv_train = torch.utils.data.DataLoader(cv_train_ds, 1)
+            dl_cv_val = torch.utils.data.DataLoader(cv_val_ds, 1)
+            x_val, y_val = dataloader_utils.flatten(dl_cv_val)
+
+            model.train(dl_cv_train)
+            y_pred = model.predict(x_val)
+
+            # Calculate accuracy
+            fold_accuracy = accuracy(y_val, y_pred)
+            k_accuracies.append(fold_accuracy)
+        accuracies.append(k_accuracies)
         # ========================
 
     best_k_idx = np.argmax([np.mean(acc) for acc in accuracies])
