@@ -52,12 +52,22 @@ class SVMHingeLoss(ClassifierLoss):
 
         loss = None
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        t1 = x_scores+self.delta
+        indices = torch.unsqueeze(y,0)
+        indices = torch.transpose(torch.cat((indices,indices) , 0),1,0)
+        t2 = torch.gather(x_scores, 1, indices)[..., 0]
+        t1 = torch.transpose(t1, 1, 0)-t2
+        t1 = torch.transpose(t1,1,0)
+        hinge = torch.maximum(torch.zeros_like(t1),t1)
+        in_loss = torch.sum(hinge, 1)
+        in_loss = in_loss-torch.ones_like(in_loss)*self.delta
+        loss = torch.sum(in_loss)/len(in_loss)
+
         # ========================
 
         # TODO: Save what you need for gradient calculation in self.grad_ctx
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        #raise NotImplementedError()
         # ========================
 
         return loss
