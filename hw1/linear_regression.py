@@ -32,7 +32,7 @@ class LinearRegressor(BaseEstimator, RegressorMixin):
 
         y_pred = None
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        y_pred = X @ self.weights_
         # ========================
 
         return y_pred
@@ -51,7 +51,14 @@ class LinearRegressor(BaseEstimator, RegressorMixin):
 
         w_opt = None
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        # N, D = X.shape
+        # regularization = self.reg_lambda * np.identity(D)
+        # X_t = X.transpose()
+        # XXtreg = X_t @ X + regularization
+        # XXtreg_inv = np.linalg.inv(XXtreg.copy())
+        # w_opt = XXtreg_inv @ X_t @ y
+
+        w_opt = np.linalg.inv(X.T @ X + self.reg_lambda*np.eye(X.shape[1])) @ X.T @ y
         # ========================
 
         self.weights_ = w_opt
@@ -78,6 +85,17 @@ def fit_predict_dataframe(
     # TODO: Implement according to the docstring description.
     # ====== YOUR CODE: ======
     raise NotImplementedError()
+
+    if(feature_names == None):
+        features = df.columns
+    else:
+        features = [] + feature_names + [target_name]
+
+    sub_df = df[df.columns.intersection(features)]
+
+    print(model)
+
+    raise NotImplementedError()
     # ========================
     return y_pred
 
@@ -100,7 +118,9 @@ class BiasTrickTransformer(BaseEstimator, TransformerMixin):
 
         xb = None
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        N = list(X.shape)[0]
+        ones = DataFrame(np.ones((N, 1)))
+        xb = np.hstack((ones, X))
         # ========================
 
         return xb
@@ -163,7 +183,12 @@ def top_correlated_features(df: DataFrame, target_feature, n=5):
     # TODO: Calculate correlations with target and sort features by it
 
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
+    curr = df[df.columns[1:]].corr()
+    curr[target_feature] = curr[target_feature].abs()
+    curr = curr.sort_values(by=target_feature, kind="quicksort", ascending=False).iloc[1:n+1 , :]
+
+    top_n_features = curr.index.values
+    top_n_corr = curr[target_feature].tolist()
     # ========================
 
     return top_n_features, top_n_corr
@@ -179,7 +204,7 @@ def mse_score(y: np.ndarray, y_pred: np.ndarray):
 
     # TODO: Implement MSE using numpy.
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
+    mse = ((y - y_pred) ** 2).mean()
     # ========================
     return mse
 
@@ -194,7 +219,9 @@ def r2_score(y: np.ndarray, y_pred: np.ndarray):
 
     # TODO: Implement R^2 using numpy.
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
+    e = y-y_pred
+    a = y-y.mean()
+    r2 = 1 - ((e**2).sum() / (a**2).sum())
     # ========================
     return r2
 
