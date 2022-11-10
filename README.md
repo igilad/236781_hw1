@@ -10,7 +10,7 @@ general-purpose tensor library with automatic gradient calculation capabilities.
 We'll use it to implement some traditional machine-learning algorithms and remind ourselves about
 basic concepts such as different data sets and their uses, model hyperparameters, cross-validation,
 loss functions and gradient derivation. We'll also familiarize ourselves with other highly important
-python machine learning packages such as `numpy`, `sklearn` and `pandas`.
+python machine learning packages such as `numpy`, `sklearn` and `pandas` .
 
 ## General Guidelines
 
