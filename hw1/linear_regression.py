@@ -32,6 +32,7 @@ class LinearRegressor(BaseEstimator, RegressorMixin):
 
         y_pred = None
         # ====== YOUR CODE: ======
+        # FIXME
         y_pred = X @ self.weights_
         # ========================
 
@@ -58,7 +59,8 @@ class LinearRegressor(BaseEstimator, RegressorMixin):
         # XXtreg_inv = np.linalg.inv(XXtreg.copy())
         # w_opt = XXtreg_inv @ X_t @ y
 
-        w_opt = np.linalg.inv(X.T @ X + self.reg_lambda*np.eye(X.shape[1])) @ X.T @ y
+        # FIXME
+        w_opt = np.linalg.inv(X.T @ X + self.reg_lambda * np.eye(X.shape[1])) @ X.T @ y
         # ========================
 
         self.weights_ = w_opt
@@ -69,7 +71,7 @@ class LinearRegressor(BaseEstimator, RegressorMixin):
 
 
 def fit_predict_dataframe(
-    model, df: DataFrame, target_name: str, feature_names: List[str] = None,
+        model, df: DataFrame, target_name: str, feature_names: List[str] = None,
 ):
     """
     Calculates model predictions on a dataframe, optionally with only a subset of
@@ -86,7 +88,7 @@ def fit_predict_dataframe(
     # ====== YOUR CODE: ======
     raise NotImplementedError()
 
-    if(feature_names == None):
+    if (feature_names == None):
         features = df.columns
     else:
         features = [] + feature_names + [target_name]
@@ -185,7 +187,7 @@ def top_correlated_features(df: DataFrame, target_feature, n=5):
     # ====== YOUR CODE: ======
     curr = df[df.columns[1:]].corr()
     curr[target_feature] = curr[target_feature].abs()
-    curr = curr.sort_values(by=target_feature, kind="quicksort", ascending=False).iloc[1:n+1 , :]
+    curr = curr.sort_values(by=target_feature, kind="quicksort", ascending=False).iloc[1:n + 1, :]
 
     top_n_features = curr.index.values
     top_n_corr = curr[target_feature].tolist()
@@ -219,15 +221,15 @@ def r2_score(y: np.ndarray, y_pred: np.ndarray):
 
     # TODO: Implement R^2 using numpy.
     # ====== YOUR CODE: ======
-    e = y-y_pred
-    a = y-y.mean()
-    r2 = 1 - ((e**2).sum() / (a**2).sum())
+    e = y - y_pred
+    a = y - y.mean()
+    r2 = 1 - ((e ** 2).sum() / (a ** 2).sum())
     # ========================
     return r2
 
 
 def cv_best_hyperparams(
-    model: BaseEstimator, X, y, k_folds, degree_range, lambda_range
+        model: BaseEstimator, X, y, k_folds, degree_range, lambda_range
 ):
     """
     Cross-validate to find best hyperparameters with k-fold CV.
