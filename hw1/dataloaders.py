@@ -11,15 +11,15 @@ class FirstLastSampler(Sampler):
     A sampler that returns elements in a first-last order.
     """
 
-    def _init_(self, data_source: Sized):
+    def __init__(self, data_source: Sized):
         """
         :param data_source: Source of data, can be anything that has a len(),
         since we only care about its number of elements.
         """
-        super()._init_(data_source)
+        super().__init__(data_source)
         self.data_source = data_source
 
-    def _iter_(self) -> Iterator[int]:
+    def __iter__(self) -> Iterator[int]:
         # TODO:
         # Implement the logic required for this sampler.
         # If the length of the data source is N, you should return indices in a
@@ -39,7 +39,7 @@ class FirstLastSampler(Sampler):
             n += 1
         # ========================
 
-    def _len_(self):
+    def __len__(self):
         return len(self.data_source)
 
 

@@ -10,27 +10,27 @@ math (delimited with $$).
 
 part1_q1 = r"""
 **Your answer:**
-
-
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
+1)  No, the test set allows us to estimate our loss Ld over the entire distribution.
+2)  No, for example there could be a case where there are 10 classes and 9 make up the train set
+    and the last makes up the test set. In this case the training is completely irrelevant to the test set 
+    and learning will fail.
+3)  Yes, validation exists to try to estimate the test accuracy without data leaking from the test set into the
+    learning process. Incorporating the test set would go against that goal and make the final test accuracy
+    not representative of the generalized loss.
+4)  Not exactly. While the performance of each fold can be thought of as a proxy for the generalized error, 
+    The point of k-fold cv is to use the average of all the folds as said proxy.
 
 """
 
 part1_q2 = r"""
 **Your answer:**
 
-
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
+No, this approach is not justified and would lead to bad generalization.
+In general using test data during training is a bad idea since it can lead to the model learning
+the test set and as such overfitting to both it and the train set.
+Because of that, the test set stops being representative of the generalized distribution and the 
+performance on actual unseen data will be bad.
+    
 
 """
 
@@ -85,17 +85,17 @@ Let $\alpha > 0$ and define $\mathbf{W'} = \alpha*\mathbf{W}$ Hence the new loss
     \frac{\lambda}{2} \|{\mathbf{W'}}\|^2 =\\=
     \frac{1}{N} \sum_{i=1}^{N} 
     \max\left(0, \alpha\Delta+ \alpha*\vec{w_j} \vec{x_i} 
-    - \alpha*\vec{w'_{y_i}} \vec{x_i}\right) 
+    - \alpha*\vec{w_{y_i}} \vec{x_i}\right) 
     +
     \frac{\lambda}{2}*\alpha^2 \|{\mathbf{W}}\|^2=\\=
     \frac{1}{N} \sum_{i=1}^{N} 
     \max\left(0, \alpha(\Delta+ \vec{w_j} \vec{x_i} 
-    - \vec{w'_{y_i}} \vec{x_i}\right)) 
+    - \vec{w_{y_i}} \vec{x_i}\right)) 
     +
     \frac{\lambda}{2}*\alpha^2 \|{\mathbf{W}}\|^2=\\=
     \frac{1}{N} \sum_{i=1}^{N} 
     \max\left(0, \Delta+ \vec{w_j} \vec{x_i} 
-    - \vec{w'_{y_i}} \vec{x_i}\right) 
+    - \vec{w_{y_i}} \vec{x_i}\right) 
     +
     \frac{\lambda}{2}*\alpha^2 \|{\mathbf{W}}\|^2
     $
@@ -106,25 +106,30 @@ part3_q2 = r"""
 **Your answer:**
 
 
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
+1) What the linear model is actually learning is a "prototype" of each digit,
+Meaning an average representation of each digit that is similar to all examples of that digit.
+Because of that, the final weights look like the digits and are interpretable.
+The samples that we got wrong tend to be rotated or deformed in some way and so because we only learn an 
+average digit and we dont try to characterize or define each digit, we get those ones wrong.
+
+2) Both of these interpretations try comparing the sample to other things and seeing what is closest.
+the difference is that knn compares the sample to the dataset and does a "vote" to decide the outcome 
+while our model learns a representation of each digit and compares the new sample to those representations.
 
 """
 
 part3_q3 = r"""
 **Your answer:**
 
+1) Too high.
+In the case of a good learning rate, the graph would be far less steep but would be relatively monotonous, 
+decreasing towards the solution at a good rate.
+A low learning rate would not even finish converging in the set amount of epochs and as such decrease 
+slowly and end on a very high loss.
 
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
+2) Our model is highly overfitted to the training set.
+We can see that because the training loss is quite a bit higher that both the validation loss and the test loss.
+This can be fixed by increasing the weight decay value.
 
 """
 
