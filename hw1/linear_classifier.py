@@ -104,7 +104,35 @@ class LinearClassifier(object):
             #     using the weight_decay parameter.
 
             # ====== YOUR CODE: ======
-            raise NotImplementedError()
+            train_losses = []
+            val_losses = []
+            train_total_y = []
+            train_total_y_pred = []
+            for x , y in dl_train:
+                y_pred, x_scores = self.predict(x)
+                train_total_y += list(y)
+                train_total_y_pred += list(y_pred)
+                loss = loss_fn(x, y, x_scores, y_pred)
+                train_losses.append(loss)
+                grad = loss_fn.grad() + weight_decay*self.weights
+                self.weights -= learn_rate*grad
+            avg_train_loss = torch.mean(torch.tensor(train_losses))
+            total_train_accuracy = self.evaluate_accuracy(torch.tensor(train_total_y) , torch.tensor(train_total_y_pred))
+            train_res.loss.append(avg_train_loss)
+            train_res.accuracy.append(total_train_accuracy)
+
+            val_total_y = []
+            val_total_y_pred = []
+            for x , y in dl_valid:
+                y_pred, x_scores = self.predict(x)
+                loss = loss_fn(x, y, x_scores, y_pred)
+                val_losses.append(loss)
+                val_total_y += list(y)
+                val_total_y_pred += list(y_pred)
+            avg_val_loss = torch.mean(torch.tensor(val_losses))
+            total_val_accuracy = self.evaluate_accuracy(torch.tensor(val_total_y), torch.tensor(val_total_y_pred))
+            valid_res.loss.append(avg_val_loss)
+            valid_res.accuracy.append(total_val_accuracy)
             # ========================
             print(".", end="")
 
@@ -138,7 +166,8 @@ def hyperparams():
     #  Manually tune the hyperparameters to get the training accuracy test
     #  to pass.
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
+    hp['learn_rate'] = 0.1
+    hp['weight_decay'] = 0.01
     # ========================
 
     return hp
