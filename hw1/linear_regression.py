@@ -32,7 +32,6 @@ class LinearRegressor(BaseEstimator, RegressorMixin):
 
         y_pred = None
         # ====== YOUR CODE: ======
-        # FIXME
         y_pred = X @ self.weights_
         # ========================
 
@@ -60,7 +59,9 @@ class LinearRegressor(BaseEstimator, RegressorMixin):
         # w_opt = XXtreg_inv @ X_t @ y
 
         # FIXME
-        w_opt = np.linalg.inv(X.T @ X + self.reg_lambda * np.eye(X.shape[1])) @ X.T @ y
+        reg_matrix = X.shape[0]*self.reg_lambda * np.eye(X.shape[1])
+        reg_matrix[0][0] = 0
+        w_opt = np.linalg.inv(X.T @ X + reg_matrix) @ X.T @ y
         # ========================
 
         self.weights_ = w_opt
