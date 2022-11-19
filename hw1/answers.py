@@ -39,27 +39,28 @@ performance on actual unseen data will be bad.
 
 part2_q1 = r"""
 **Your answer:**
-
-
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
+k serves as a way to control the regularization of the model and by doing so we move
+between overfitting and underfitting.
+With k=1 we memorize the entire dataset and achieve a train accuracy of 100% which is a case
+of extreme overfitting. On the other hand for large values like k = num_samples we just always
+guess the most common sample in the dataset and dont learn anything which is an extreme case of underfitting.
+Inbetween those two extremes there is an optimal k which helps avoid both overfitting and underfitting.
 
 """
 
 part2_q2 = r"""
 **Your answer:**
 
-
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
+1)  Training on just the training set and evaluating the model based on the same train set will
+    encourage models that overfit heavily to the train set and achieve poor generalization.
+    For example, if we were to try this method with knn we would always get k = 1
+    since it achieves 100% train accuracy but terrible generalization.
+    k-fold cv avoids this by evaluating the model on unseen folds and by doing so simulate normal 
+    training conditions which can generalize.
+2)  Constantly evaluating the model on the train set will make the learning process too specific to the
+    chosen test set and cause test data to implicitly leak into the training process.
+    In essence the more we know about the test set, the less it represents the distribution and
+    so this method will create a model that achieves good test accuracy but generalizes poorly.
 
 """
 
