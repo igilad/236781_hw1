@@ -67,7 +67,7 @@ class SVMHingeLoss(ClassifierLoss):
 
         # TODO: Save what you need for gradient calculation in self.grad_ctx
         # ====== YOUR CODE: ======
-        self.grad_ctx = {'M': t1 , 'x_scores': x_scores}
+        self.grad_ctx = {'M': t1 , 'x_scores': x , 'y': y}
         # ========================
 
         return loss
@@ -86,9 +86,13 @@ class SVMHingeLoss(ClassifierLoss):
         grad = None
         # ====== YOUR CODE: ======
         indicator = (self.grad_ctx['M']>0).float().to(dtype = self.grad_ctx['M'].dtype)
-        diag_sum  = torch.sum(indicator, 1)
-        g = indicator - torch.diag(diag_sum)
-        grad = torch.transpose(self.grad_ctx['x_scores'],1,0)@g
+        diag_sum = torch.tensor([list(torch.sum(indicator, 1))])
+        diag_sum = torch.transpose(diag_sum, -1, 0)
+        index = torch.tensor([list(self.grad_ctx['y'])])
+        index = torch.transpose(index, -1, 0)
+        zeros = torch.zeros_like(indicator , dtype = self.grad_ctx['M'].dtype )
+        g = indicator-zeros.scatter_(-1 , index , diag_sum , reduce = 'add')
+        grad = torch.transpose(self.grad_ctx['x_scores'],1,0)@g/self.grad_ctx['x_scores'].shape[0]
         # ========================
 
         return grad
