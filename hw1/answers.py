@@ -70,15 +70,36 @@ An equation: $e^{i\pi} -1 = 0$
 
 part3_q1 = r"""
 **Your answer:**
-
-
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
-
+We will show that $\Delta > 0$  is arbitrary by showing that changing it to $\alpha\Delta$ results in an equivalent problem.
+Let $\alpha > 0$ and define $\mathbf{W'} = \alpha*\mathbf{W}$ Hence the new loss is now 
+    $L(\mathbf{W'}) =
+    \frac{1}{N} \sum_{i=1}^{N} 
+    \max\left(0, \alpha\Delta+ \vec{w'_j} \vec{x_i} 
+    - \vec{w'_{y_i}} \vec{x_i}\right) 
+    +
+    \frac{\lambda}{2} \|{\mathbf{W'}}\|^2 =\\=
+    \frac{1}{N} \sum_{i=1}^{N} 
+    \max\left(0, \alpha\Delta+ \vec{w'_j} \vec{x_i} 
+    - \vec{w'_{y_i}} \vec{x_i}\right) 
+    +
+    \frac{\lambda}{2} \|{\mathbf{W'}}\|^2 =\\=
+    \frac{1}{N} \sum_{i=1}^{N} 
+    \max\left(0, \alpha\Delta+ \alpha*\vec{w_j} \vec{x_i} 
+    - \alpha*\vec{w'_{y_i}} \vec{x_i}\right) 
+    +
+    \frac{\lambda}{2}*\alpha^2 \|{\mathbf{W}}\|^2=\\=
+    \frac{1}{N} \sum_{i=1}^{N} 
+    \max\left(0, \alpha(\Delta+ \vec{w_j} \vec{x_i} 
+    - \vec{w'_{y_i}} \vec{x_i}\right)) 
+    +
+    \frac{\lambda}{2}*\alpha^2 \|{\mathbf{W}}\|^2=\\=
+    \frac{1}{N} \sum_{i=1}^{N} 
+    \max\left(0, \Delta+ \vec{w_j} \vec{x_i} 
+    - \vec{w'_{y_i}} \vec{x_i}\right) 
+    +
+    \frac{\lambda}{2}*\alpha^2 \|{\mathbf{W}}\|^2
+    $
+    The final formulation is equivalent to the original problem differing in the choice of $\lambda$ and so because for every $\lambda$ that is optimal for the original, $\lambda*\alpha^2$ is optimal for the new problem, we get that the two are equivalent.
 """
 
 part3_q2 = r"""
@@ -117,10 +138,7 @@ part4_q1 = r"""
 
 
 Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
+z
 An equation: $e^{i\pi} -1 = 0$
 
 """
