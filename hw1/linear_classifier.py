@@ -153,7 +153,8 @@ class LinearClassifier(object):
         #  The output shape should be (n_classes, C, H, W).
 
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        sizes = [self.weights.shape[1]] + list(img_shape)
+        w_images = torch.transpose(self.weights[1:,] , 1 , 0).reshape(sizes)
         # ========================
 
         return w_images
