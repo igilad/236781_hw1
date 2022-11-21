@@ -141,46 +141,34 @@ This can be fixed by increasing the weight decay value.
 
 part4_q1 = r"""
 **Your answer:**
-Thw ideal pattern we wish to see in residual plot is when variance is roughly the same all the way across and there are
-no worrisome patterns. i.e: The dots on the plot will be randomly scattered, forming an approximately constant width band
-around the identity line
-
+The ideal pattern we wish to see in residual plots is residuals with roughly the same size and that size being quite small around the zero line.
 We can see on the first plot that the points forms a curved pattern,
 whereas on the final plot after the CV we see that the variance is roughly the same and the points are forming approximately constant width band around the identity line. i.e.:we predict the data better.
 We can learn that feature engineering and tunning can improve predictions
-
-Write your answer using **markdown** and $\LaTeX$:
-z
-An equation: $e^{i\pi} -1 = 0$
 
 """
 
 part4_q2 = r"""
 **Your answer:**
 
-1. Yes, this is still a linear regression because we address the linearity of the parameters and not of the features.
-Creating features based on existing features will not effect the data but can help us get a more complex model (line) for the predictions
-Note: more complex models can fit the training data better but they may also "overfit" 
+1. Yes, this is still a linear regression but not in the original parameters.
+while we are still fitting a line to our data while minimizing mse, this data is now a non-linear representation of the original data and as such can fit a non-linear function to the data which impossible to achieve by linear regression.
+Note: we address the linearity of the parameters and not of the features.
 
-2. Yes, we can fit any non-linear function, the higher order the polynomial function we make it can fit the original features better,
-BUT as mentioned above, we might "overfit" the training data and get worse test results.
+2. Yes, we can fit any non-linear function, because any non-linear function has a matching transformation on the features which makes the function linear on the new featurs 
+BUT we might "overfit" the training data and get worse test results.
 
-3. missing TODO: Gilad
-
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
+3. Yes it would still be a hyperplane but not in the original space of features.
+This new hyperplane would still be linearly separating data but the data is now the original data after a non-linear transformation.
+Because of that data that could not be separated previously may be linearly separable now
 
 """
 
 part4_q3 = r"""
 **Your answer:**
-1.
+1. 
 
-2. The model was fited 
+2. The model was fitted 
 
 Write your answer using **markdown** and $\LaTeX$:
 ```python
