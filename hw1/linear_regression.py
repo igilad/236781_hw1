@@ -51,15 +51,7 @@ class LinearRegressor(BaseEstimator, RegressorMixin):
 
         w_opt = None
         # ====== YOUR CODE: ======
-        # N, D = X.shape
-        # regularization = self.reg_lambda * np.identity(D)
-        # X_t = X.transpose()
-        # XXtreg = X_t @ X + regularization
-        # XXtreg_inv = np.linalg.inv(XXtreg.copy())
-        # w_opt = XXtreg_inv @ X_t @ y
-
-        # FIXME
-        reg_matrix = X.shape[0]*self.reg_lambda * np.eye(X.shape[1])
+        reg_matrix = self.reg_lambda * X.shape[0] * np.eye(X.shape[1])
         reg_matrix[0][0] = 0
         w_opt = np.linalg.inv(X.T @ X + reg_matrix) @ X.T @ y
         # ========================
@@ -87,18 +79,19 @@ def fit_predict_dataframe(
     """
     # TODO: Implement according to the docstring description.
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
 
-    if (feature_names == None):
-        features = df.columns
+    if feature_names is None:
+        features = df.columns.tolist()
     else:
-        features = [] + feature_names + [target_name]
+        features = feature_names
 
-    sub_df = df[df.columns.intersection(features)]
+    if target_name in features:
+        features.remove(target_name)
 
-    print(model)
+    sub_df = df[features]
 
-    raise NotImplementedError()
+    y_pred = model.fit_predict(sub_df, df[target_name])
+
     # ========================
     return y_pred
 
@@ -140,7 +133,7 @@ class BostonFeaturesTransformer(BaseEstimator, TransformerMixin):
         # TODO: Your custom initialization, if needed
         # Add any hyperparameters you need and save them as above
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        # self.transforms = [lambda:x**2]
         # ========================
 
     def fit(self, X, y=None):
@@ -162,7 +155,8 @@ class BostonFeaturesTransformer(BaseEstimator, TransformerMixin):
 
         X_transformed = None
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        poly = PolynomialFeatures(degree=self.degree)
+        X_transformed = poly.fit_transform(X)
         # ========================
 
         return X_transformed
@@ -257,7 +251,32 @@ def cv_best_hyperparams(
     #  - You can use MSE or R^2 as a score.
 
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
-    # ========================
+    params = dict()
+    params['linearregressor__reg_lambda'] = list(lambda_range)
+    params['bostonfeaturestransformer__degree'] = list(degree_range)
+
+    #method 1
+    """
+    # define search
+    search = sklearn.model_selection.GridSearchCV(model, param_grid=params, scoring='r2', cv=k_folds, refit=True)
+    # execute search
+    search.fit(X, y)
+    # get the best performing model fit on the whole training set
+    best_model = search.best_estimator_
+    best_params = best_model.get_params()
+    """
+
+    #method 2
+    print(sklearn.metrics.get_scorer_names())
+    # configure the cross-validation procedure
+    kf = sklearn.model_selection.KFold(n_splits=k_folds, shuffle=True, random_state=1)
+    # define search
+    search = sklearn.model_selection.GridSearchCV(model, params, scoring='neg_mean_squared_error', cv=kf, refit=True)
+    # execute search
+    search.fit(X, y)
+    best_model = search.best_estimator_
+    best_params = best_model.get_params()
+
+# ========================
 
     return best_params
