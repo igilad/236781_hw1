@@ -90,7 +90,8 @@ def fit_predict_dataframe(
 
     sub_df = df[features]
 
-    y_pred = model.fit_predict(sub_df, df[target_name])
+
+    y_pred = model.fit_predict(sub_df.to_numpy(), df[target_name])
 
     # ========================
     return y_pred
@@ -133,7 +134,7 @@ class BostonFeaturesTransformer(BaseEstimator, TransformerMixin):
         # TODO: Your custom initialization, if needed
         # Add any hyperparameters you need and save them as above
         # ====== YOUR CODE: ======
-        # self.transforms = [lambda:x**2]
+        self.transforms = [lambda:x**2]
         # ========================
 
     def fit(self, X, y=None):
@@ -156,6 +157,7 @@ class BostonFeaturesTransformer(BaseEstimator, TransformerMixin):
         X_transformed = None
         # ====== YOUR CODE: ======
         poly = PolynomialFeatures(degree=self.degree)
+
         X_transformed = poly.fit_transform(X)
         # ========================
 
